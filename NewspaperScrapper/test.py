@@ -1,6 +1,16 @@
 from newsLib import NewsList
 
-nl = NewsList(2023, 1, "SCIENCE")
+print("# 연도")
+year = int(input())
+
+print("\n# 월")
+month = int(input())
+
+print("\n카테고리")
+categoryName = input()
+
+nl = NewsList(year, month, categoryName)
+
 newsList = []
 while nl.hasNextDay():
     print(f"\n# {nl.year}/{nl.month}/{nl.day}")
