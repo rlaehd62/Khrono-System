@@ -1,4 +1,4 @@
-from newsLib import NewsList
+from newsLib import *
 
 print("# 연도")
 year = int(input())
@@ -17,4 +17,15 @@ while nl.hasNextDay():
     while nl.hasNextPage(): 
         newsList += nl.next()
         print(f"> Page {nl.page} ({len(newsList)})")
+        break
     nl.nextDay()
+    break
+
+cnt = 0
+newspapers = []
+for url in newsList:
+    paper = Newspaper(url)
+    print(paper.toRow())
+    cnt += 1
+    
+print(cnt)
