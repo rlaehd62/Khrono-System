@@ -1,4 +1,5 @@
 from newsLib import *
+import pandas as pd
 
 print("# 연도")
 year = int(input())
@@ -25,7 +26,8 @@ cnt = 0
 newspapers = []
 for url in newsList:
     paper = Newspaper(url)
-    print(paper.toRow())
+    newspapers.append(paper.toRow())
     cnt += 1
-    
-print(cnt)
+
+dataframe = pd.DataFrame(newspapers,  columns=['ID', 'YEAR', 'MONTH', 'TITLE', 'CONTEXT'])
+dataframe.to_csv("data.csv", index=False)
