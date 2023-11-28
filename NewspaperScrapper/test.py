@@ -1,33 +1,21 @@
 from newsLib import *
 import pandas as pd
 
-print("# 연도")
+print("# [연도]")
 year = int(input())
 
-print("\n# 월")
-month = int(input())
+print("\n# [시작_월] [최대_월]")
+month, maxMonth = map(int, input().split())
 
-print("\n카테고리")
+print("\n[카테고리]")
 categoryName = input()
 
-nl = NewsList(year, month, categoryName)
+lister = NewsLister(year, month, maxMonth, categoryName)
 
-newsList = []
-while nl.hasNextDay():
-    print(f"\n# {nl.year}/{nl.month}/{nl.day}")
-    while nl.hasNextPage(): 
-        newsList += nl.next()
-        print(f"> Page {nl.page} ({len(newsList)})")
-        break
-    nl.nextDay()
-    break
+paperList = []
+while lister.hasNext(): 
+    paperList += lister.next()
+    print(paperList)
 
-cnt = 0
-newspapers = []
-for url in newsList:
-    paper = Newspaper(url)
-    newspapers.append(paper.toRow())
-    cnt += 1
-
-dataframe = pd.DataFrame(newspapers,  columns=['ID', 'YEAR', 'MONTH', 'TITLE', 'CONTEXT'])
-dataframe.to_csv("data.csv", index=False)
+df = pd.DataFrame(paperList,  columns=['ID', 'YEAR', 'MONTH', 'TITLE', 'CONTEXT'])
+df.to_csv("data.csv", index=False)
