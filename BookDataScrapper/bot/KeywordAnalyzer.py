@@ -27,16 +27,19 @@ class Analyzer:
         
         keywords = filtered_df['KEYWORD'].tolist()
         keywords = extractKeywords(' '.join(keywords))
+        return (f"{self.year}{self.month:02d}", ','.join(keywords))
         
-        print(keywords)
+        # print(keywords)
         
-        dataList = []
-        for keyword in keywords: dataList.append([ self.year, self.month, keyword ])
-        return pd.DataFrame(dataList, columns = [ 'YEAR', 'MONTH', 'KEYWORD '])
+        # dataList = []
+        # for keyword in keywords: dataList.append([ self.year, self.month, keyword ])
+        # return pd.DataFrame(dataList, columns = [ 'YEAR', 'MONTH', 'KEYWORD '])
     
 
 def process(year: int, startMonth: int, endMonth: int, totalBookDataframe: pd.DataFrame):
-    dataFrames = []
+    # dataFrames = []
+    rows = []
     analyzer = Analyzer(year, startMonth, endMonth, totalBookDataframe)
-    while analyzer.hasNext(): dataFrames.append(analyzer.next())
-    return pd.concat(dataFrames, ignore_index=True)
+    while analyzer.hasNext(): rows.append(analyzer.next())
+    # return pd.concat(dataFrames, ignore_index=True)
+    return pd.DataFrame(rows, columns = ['DATE', 'KEYWORDS'])
