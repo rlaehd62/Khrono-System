@@ -15,8 +15,14 @@ def initNews(path: str) -> pd.DataFrame:
     
 
 def main():
-    df_news = initNews("test.csv")
-    print(df_news.to_string())
+    
+    print("# Absolute path of keyword file")
+    df_keywords = pd.read_csv(input())
+    
+    print("\n#Absolute path of news file")
+    df_news = initNews(input())
+    
+    # TODO : 반복하며 Cosine Similarity 계산하기.
 
 if __name__ == "__main__":
     main()
