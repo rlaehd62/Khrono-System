@@ -16,6 +16,6 @@ def calculate_similarity(sentence1: str, sentence2: str):
     similarity = cosine_similarity([vectors[0]], [vectors[1]])[0, 0]
     print(similarity, "\n")
     
-    return round(similarity, 3)
+    return similarity
 
 

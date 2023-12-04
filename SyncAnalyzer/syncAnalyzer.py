@@ -1,4 +1,5 @@
 from operator import index
+from re import X
 import pandas as pd
 import numpy as np
 from lib.syncLib import calculate_similarity as cs
@@ -10,15 +11,21 @@ DATE_COLUMN: str = '일자'
 def changeDate(date):
     return str(date)[0:6]
 
-def formatKeywords(x: pd.Series):
-    array = [val for val in x.values if not pd.isnull(val)]
-    return str(''.join(array))
+def test(keywords, x):
+    sentence1 = keywords[x].replace(",", " ")
+    sentence2 = x.replace(",", " ")
+    return cs(sentence1, sentence2)
 
 # 뉴스 데이터를 월 기준으로 재구조화
-def initNews(path: str) -> pd.DataFrame:
+def initNews(path: str, keywords) -> pd.DataFrame:
     df = pd.read_csv(path, index_col = 0)
     df['일자'] = df['일자'].apply(changeDate)
-    return df.groupby(by=['일자'])['특성추출(가중치순 상위 50개)'].apply(formatKeywords).reset_index()
+    df['키워드'] = df['키워드'].apply(lambda x: str(x).replace(",", " "))
+    df['비교군'] = df.apply(lambda row: keywords[int(row['일자'])].replace(",", " "), axis = 1)
+    
+    df['일치율'] = df.fillna('NO KEYWORDS FOUND ON THIS ROW').apply(lambda row: cs(row['비교군'], row['키워드']), axis = 1)
+    df = df.drop(columns=['비교군', '언론사', '기고자', '통합 분류1', '통합 분류2', '통합 분류3', '사건/사고 분류1', '사건/사고 분류2', '사건/사고 분류3', '인물', '위치', '기관','분석제외 여부'], axis=1)
+    return df.sort_values(by = ['일치율'],ascending=False)
     
 
 def main():
@@ -30,11 +37,10 @@ def main():
     
     
     print("\n#Absolute path of news file")
-    df_news = initNews(input())
-    df_news['일치율'] = df_news['일자'].apply(lambda x: cs(keywords[int(x)].replace(",", " "), ''.join(df_news['특성추출(가중치순 상위 50개)'].values).replace(",", " ")))
-    print(df_news['일치율'].to_string())
+    df_news = initNews(input(), keywords)
+    # print(df_news[['일자', '제목', '일치율']].to_string(max_rows=100))
+    # TODO : Cosine Similarity 평균 내기
     
-    # TODO : 반복하며 Cosine Similarity 계산하기.
 
 if __name__ == "__main__":
     main()
