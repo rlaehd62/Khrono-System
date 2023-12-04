@@ -1,14 +1,11 @@
-from operator import index
-from re import X
 import pandas as pd
-import numpy as np
 from lib.syncLib import calculate_similarity as cs
 
 # Big Kinds는 '일자', 현재는 테스트 전용
 DATE_COLUMN: str = '일자'
 
 # YEAR-MONTH-DAY 중 DAY를 제거한다
-def changeDate(date):
+def change_date(date):
     return str(date)[0:6]
 
 def test(keywords, x):
@@ -17,9 +14,9 @@ def test(keywords, x):
     return cs(sentence1, sentence2)
 
 # 뉴스 데이터를 월 기준으로 재구조화
-def initNews(path: str, keywords) -> pd.DataFrame:
+def init_news(path: str, keywords) -> pd.DataFrame:
     df = pd.read_csv(path, index_col = 0)
-    df['일자'] = df['일자'].apply(changeDate)
+    df['일자'] = df['일자'].apply(change_date)
     df['키워드'] = df['키워드'].apply(lambda x: str(x).replace(",", " "))
     df['비교군'] = df.apply(lambda row: keywords[int(row['일자'])].replace(",", " "), axis = 1)
     
@@ -37,8 +34,8 @@ def main():
     
     
     print("\n#Absolute path of news file")
-    df_news = initNews(input(), keywords)
-    # print(df_news[['일자', '제목', '일치율']].to_string(max_rows=100))
+    df_news = init_news(input(), keywords)
+    print(df_news[['일자', '제목', '일치율']].to_string(max_rows=100))
     # TODO : Cosine Similarity 평균 내기
     
 
