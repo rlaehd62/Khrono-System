@@ -35,7 +35,12 @@ def main():
     
     print("\n#Absolute path of news file")
     df_news = init_news(input(), keywords)
+    df_news.to_csv("totalSync.csv")
     print(df_news[['일자', '제목', '일치율']].to_string(max_rows=100))
+    
+    df_news = df_news.drop(columns = ['제목'], axis = 1)
+    df_news.groupby(['일자']).mean()
+    df_news.to_csv("monthlySync.csv")
     # TODO : Cosine Similarity 평균 내기
     
 
