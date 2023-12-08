@@ -41,7 +41,6 @@ def main():
     df_news = df_news[['일자', '일치율']]
     df_news = df_news.groupby(['일자'])['일치율'].mean().reset_index()
     df_news.to_csv("monthlySync.csv")
-    # TODO : Cosine Similarity 평균 내기
     
 
 if __name__ == "__main__":
