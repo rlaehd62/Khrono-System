@@ -21,8 +21,8 @@ def init_news(path: str, keywords) -> pd.DataFrame:
     df['비교군'] = df.apply(lambda row: keywords[int(row['일자'])].replace(",", " "), axis = 1)
     
     df['일치율'] = df.fillna('NO KEYWORDS FOUND ON THIS ROW').apply(lambda row: cs(row['비교군'], row['키워드']), axis = 1)
-    df = df.drop(columns=['비교군', '언론사', '기고자', '통합 분류1', '통합 분류2', '통합 분류3', '사건/사고 분류1', '사건/사고 분류2', '사건/사고 분류3', '인물', '위치', '기관','분석제외 여부'], axis=1)
-    return df.sort_values(by = ['일치율'],ascending=False)
+    df = df[['일자', '제목', '일치율']]
+    return df.sort_values(by = ['일치율'], ascending=False)
     
 
 def main():
@@ -38,8 +38,8 @@ def main():
     df_news.to_csv("totalSync.csv")
     print(df_news[['일자', '제목', '일치율']].to_string(max_rows=100))
     
-    df_news = df_news.drop(columns = ['제목'], axis = 1)
-    df_news.groupby(['일자']).mean()
+    df_news = df_news[['일자', '일치율']]
+    df_news = df_news.groupby(['일자'])['일치율'].mean().reset_index()
     df_news.to_csv("monthlySync.csv")
     # TODO : Cosine Similarity 평균 내기
     
