@@ -1,16 +1,13 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np, math
+from sentence_transformers import SentenceTransformer, util
 
+
+model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 def calculate_similarity(sentence1: str, sentence2: str):
     
-    print("Calculating Similarity")
-    print(sentence1)
-    print(sentence2)
+    embeddings1 = model.encode([sentence1], convert_to_tensor=True)
+    embeddings2 = model.encode([sentence2], convert_to_tensor=True)
     
-    vectors = TfidfVectorizer().fit_transform([sentence1, sentence2])
-    similarity = cosine_similarity(vectors[0:1], vectors[1:2])[0][0]
+    cosine_scores = util.cos_sim(embeddings1, embeddings2)
+    print(f"{sentence1} vs {sentence2} : {cosine_scores[0][0]:0.4f}")
     
-    print(similarity, "\n")
-    return similarity
-
+    return cosine_scores[0][0]
