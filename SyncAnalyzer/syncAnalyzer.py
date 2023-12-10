@@ -22,7 +22,7 @@ def init_news(path: str, keywords) -> pd.DataFrame:
     
     df['일치율'] = df.fillna('NO KEYWORDS FOUND ON THIS ROW').apply(lambda row: cs(row['비교군'], row['키워드']), axis = 1)
     df = df[['일자', '제목', '일치율']]
-    return df.sort_values(by = ['일치율'], ascending=False)
+    return df.sort_values(by = ['일자', '일치율'], ascending=[True, False])
     
 
 def main():
