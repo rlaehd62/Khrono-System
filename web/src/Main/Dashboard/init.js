@@ -6,7 +6,7 @@ const Dashboard = () => {
     return(
         <div class="flex justify-center flex-wrap h-auto py-4 my-4 gap-x-6">
 
-            <div class="basis-2/4 h-scren rounded bg-slate-200">
+            <div class="basis-2/4 h-fit rounded bg-slate-200 py-4">
                 <GraphInfo />
             </div>
 
