@@ -1,10 +1,21 @@
-def calculate_similarity(sentence1: str, sentence2: str):
+from sentence_transformers import SentenceTransformer, util
+
+model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
+def calculate_similarity(sentences1: str, sentences2: str):
     
-    set1 = set(sentence1.split())
-    set2 = set(sentence2.split())
+    list1 = sentences1.split()
+    list2 = sentences2.split()
     
-    intersection = set1 & set2
-    union = set1 | set2
+    embeddings1 = model.encode(list1)
+    embeddings2 = model.encode(list2)
+    cosine_scores = util.cos_sim(embeddings1, embeddings2) # type: ignore
     
-    print(intersection)
-    return len(intersection) / len(union) if len(union) != 0 else 0
+    count: int = 0
+    for i in range(len(list1)):
+        for j in range(len(list2)):
+            if (cosine_scores[i][j] >= 0.80):
+                count += 1
+                break
+            
+    return count / len(list2)
+
