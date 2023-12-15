@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer, util
 
-model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
+model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS', device="cuda")
 def calculate_similarity(sentences1: str, sentences2: str):
     
     list1 = sentences1.split()
